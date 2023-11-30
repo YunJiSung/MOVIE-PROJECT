@@ -2,7 +2,7 @@
     <header id="header" role="banner">
         <div class="header__inner">
             <div class="header__nav">
-                <h1>Movie Site</h1>
+                <h1><a href="/">Movie Star</a></h1>
                 <nav>
                     <ul>
                         <li><a herf=""></a>추천 영화 Top10</li>
@@ -13,73 +13,70 @@
         </div>
     </header>
     <main id="main">
-        <div class="detail__intro"
-            :style="{ backgroundImage: 'url(https://image.tmdb.org/t/p/w500/kjQBrc00fB2RjHZB3PGR4w9ibpz.jpg)' }">
-            <div class="container">
-                <div class="left play icon">
-                    <img :src="'https://image.tmdb.org/t/p/w500' + movieInfo.poster_path" :alt="movieInfo.title">
-                </div>
-                <div class="right">
-                    <h2>{{ movieInfo.title }}</h2>
-                    <p class="desc">{{ movieInfo.overview }}</p>
-                    <p class="date">개봉일: {{ movieInfo.release_date }}</p>
-                    <p class="average">평점: {{ movieInfo.vote_average }}</p>
-
-                    <div class="credits" v-if="movieInfo.actors && movieInfo.actors.length > 0">
-                        <div v-for="actor in movieInfo.actors.slice(0, 5)" :key="actor.id">
-                            <img :src="'https://image.tmdb.org/t/p/w500' + actor.profile_path" :alt="actor.name" />
-                        </div>
-                    </div>
-                    <!-- <div class="credits">
-                        <div v-for="actor in movieInfo.actors" :key="actor.id">
-                            <img :src="'https://image.tmdb.org/t/p/w500' + actor.profile_path" :alt="actor.name" />
-                        </div>
-                    </div> -->
-                </div>
-            </div>
-        </div>
+        <DetailIntro v-if="movieBasic && movieCredits" :movieBasic="movieBasic" :movieCredits="movieCredits" />
+        <DetailInfo v-if="movieInfo" :movieInfo="movieInfo" />
+        <DetailReview v-if="movieReview" :movieReview="movieReview" />
+        <DetailCredits v-if="movieCredits" :movieCredits="movieCredits" />
     </main>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import FooterSection from '../components/section/FooterSection.vue';
-import HeaderSection from '../components/section/HeaderSection.vue';
+import axios from 'axios';
+
+import DetailIntro from "../components/detail/DetailIntro.vue";
+import DetailInfo from "../components/detail/DetailInfo.vue";
+import DetailReview from "../components/detail/DetailReview.vue";
+import DetailCredits from "../components/detail/DetailCredits.vue";
+
 export default {
-    setup() {
-        const route = useRoute();
-        const movieInfo = ref({});
-        const movieInfoFetch = (movieId) => {
-            const apiKey = import.meta.env.VITE_API_KEY;
+    name: "MovieDetailPage",
 
-            const movieInfoPromise = fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=ko-KR`)
-                .then((response) => response.json());
-            const creditsPromise = fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}`)
-                .then((response) => response.json());
-            Promise.all([movieInfoPromise, creditsPromise])
-                .then((results) => {
-                    const [movieInfoResult, creditsResult] = results;
+    components: {
+        DetailIntro,
+        DetailInfo,
+        DetailReview,
+        DetailCredits,
 
-                    const mergedMovieInfo = { ...movieInfoResult, actors: creditsResult.cast };
-
-                    movieInfo.value = mergedMovieInfo;
-
-                    console.log(movieInfo.value);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        };
-        onMounted(() => {
-            const movieId = route.params.movieId;
-            movieInfoFetch(movieId);
-        });
-        return {
-            movieInfo,
-        };
     },
-    components: { FooterSection, HeaderSection }
+
+    setup() {
+        const movieBasic = ref(null);
+        const movieInfo = ref(null);
+        const movieReview = ref(null);
+        const movieCredits = ref([]);
+
+        const route = useRoute();
+
+        onMounted(async () => {
+            const movieId = route.params.movieId;
+            const apiKey = import.meta.env.VITE_API_KEY;
+            const language = "ko-KR";
+
+            try {
+                const resMovieBasic = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}?language=${language}&api_key=${apiKey}`);
+                movieBasic.value = resMovieBasic.data;
+                console.log(movieBasic)
+
+                const resMovieInfo = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}?language=${language}&api_key=${apiKey}`);
+                movieBasic.value = resMovieBasic.data;
+
+                const resMovieReview = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}?language=${language}&api_key=${apiKey}`);
+                movieBasic.value = resMovieBasic.data;
+
+
+                const resMovieCredits = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=${language}&api_key=${apiKey}`);
+                movieCredits.value = resMovieCredits.data.cast; // 출연진 데이터 할당
+
+
+            } catch (err) {
+                console.log(err)
+            }
+        });
+
+        return { movieBasic, movieInfo, movieReview, movieCredits };
+    }
 }
 </script>
 
@@ -167,18 +164,14 @@ export default {
                 margin-bottom: 10px;
             }
 
-            .credits {
+            .cast-item {
                 display: flex; // 추가된 스타일
                 gap: 10px; // 추가된 스타일
 
-                div {
-                    flex: 0 0 auto;
-
-                    img {
-                        width: 100px;
-                        height: auto;
-                        border-radius: 5px;
-                    }
+                img {
+                    width: 100px;
+                    height: auto;
+                    border-radius: 5px;
                 }
             }
         }
