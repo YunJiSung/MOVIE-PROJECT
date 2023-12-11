@@ -2,13 +2,17 @@
     <div class="movie-layout">
         <!-- 영화 상세 정보 및 배우 사진 목록 -->
         <div class="movie-details">
-            <h2>"The Creator"</h2>
-            <p>영화에 대한 설명...</p>
+            <h2></h2>
+            <p></p>
             <div class="cast-container">
-                <h3>주연 배우</h3>
-                <div class="cast-row">
-                    <div class="cast-item" v-for="(cast, key) in movieCredits.slice(0, 5)" :key="key">
-                        <img :src="'https://image.tmdb.org/t/p/w500' + cast.profile_path" v-if="cast.profile_path">
+                <h3></h3>
+                <div class="cast-row1">
+                    <div class="cast-item1" v-for="(cast, key) in movieCredits.slice(0, 10)" :key="key">
+                        <div class="cast-info1">
+                            <img :src="'https://image.tmdb.org/t/p/w500' + cast.profile_path" v-if="cast.profile_path">
+                            <p>{{ cast.name }}</p>
+                            <p>{{ cast.character }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,26 +57,85 @@ export default {
 }
 
 .cast-container {
+    display: flex;
+    justify-content: center;
+    /* 중앙 정렬 */
     margin-top: 20px;
-    /* 배우 사진 목록 위 간격 */
+    flex-wrap: wrap;
+    /* 요소들이 화면 너비를 넘어갈 경우 줄바꿈 */
+}
+
+.cast-row1 {
+    display: flex;
+    justify-content: center;
+    /* 중앙 정렬 */
+    gap: 20px;
+    /* 배우 사진 사이 간격 */
+}
+
+.cast-item1 {
+    display: flex;
+    flex-direction: column;
+    /* 세로 정렬 */
+    align-items: center;
+    /* 가운데 정렬 */
+    width: 150px;
+    /* 배우 사진 및 텍스트 영역의 폭 */
+    cursor: pointer;
+    /* 마우스 호버시 포인터 변경 */
+    transition: transform 0.3s ease;
+    /* 부드러운 변형 효과 */
+}
+
+.cast-item1:hover {
+    transform: scale(1.1);
+    /* 호버시 약간 확대 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* 호버시 그림자 효과 */
+}
+
+.cast-item1 img {
+    width: 100%;
+    /* 이미지 너비를 컨테이너에 맞춤 */
+    height: auto;
+    /* 이미지 높이를 자동으로 설정 */
+    border-radius: 10px;
+    /* 이미지 모서리 둥글게 */
+    margin-bottom: 10px;
+    /* 이미지와 텍스트 사이 간격 */
+}
+
+.cast-info1 p {
+    margin: 5px 0;
+    /* 텍스트 상하 간격 */
+    font-size: 1em;
+    /* 텍스트 크기 */
+    text-align: center;
+    /* 텍스트 중앙 정렬 */
+}
+
+
+/* .cast-container {
+    margin-top: 20px;
+
 }
 
 .cast-row {
     display: flex;
-    /* 가로 정렬 */
+    
     gap: 10px;
-    /* 배우 사진 사이 간격 */
+
 }
 
 .cast-item img {
     width: auto;
-    /* 원본 비율 유지 */
+
     height: 100px;
-    /* 일정한 높이 설정 */
+
     border-radius: 10px;
-    /* 둥근 모서리 */
+
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* 그림자 효과 */
-}
+
+} */
 </style>
   

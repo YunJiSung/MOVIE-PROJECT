@@ -5,8 +5,8 @@
                 <h1><a href="/">Movie Star</a></h1>
                 <nav>
                     <ul>
-                        <li><a herf=""></a>추천 영화 Top10</li>
-                        <li><a herf=""></a>코딩 영화 Top10</li>
+                        <li><a herf=""></a></li>
+                        <li><a herf=""></a></li>
                     </ul>
                 </nav>
             </div>
@@ -157,7 +157,7 @@ export default {
             }
 
             p {
-                margin-bottom: 5px;
+                margin-bottom: 10px;
             }
 
             .desc {
@@ -165,6 +165,7 @@ export default {
             }
 
             .cast-item {
+
                 display: flex; // 추가된 스타일
                 gap: 10px; // 추가된 스타일
 
@@ -172,7 +173,11 @@ export default {
                     width: 100px;
                     height: auto;
                     border-radius: 5px;
+                    margin: 20px;
+
                 }
+
+
             }
         }
 

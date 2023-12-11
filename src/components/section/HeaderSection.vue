@@ -5,8 +5,8 @@
                 <h1>Movie Site</h1>
                 <nav>
                     <ul>
-                        <li><a herf=""></a>추천 영화 Top10</li>
-                        <li><a herf=""></a>코딩 영화 Top10</li>
+                        <li><a herf=""></a></li>
+                        <li><a herf=""></a></li>
                     </ul>
                 </nav>
             </div>

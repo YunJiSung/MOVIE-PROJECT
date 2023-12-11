@@ -108,7 +108,7 @@ onMounted(async () => {
   <FooterSection />
 </template>
 
-<!-- <script>
+<script>
 import HeaderSection from '@/components/section/HeaderSection.vue';
 import FooterSection from '@/components/section/FooterSection.vue';
 
@@ -151,7 +151,7 @@ export default {
     }
   }
 }
-</script> -->
+</script>
 
 
 <style lang="scss">
